@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <title>Firebase 接続テスト</title>
+    <title>Firebase 接続テスト (修正版)</title>
     <style>
         body { font-family: sans-serif; padding: 2em; }
         #status { font-weight: bold; font-size: 1.5em; }
     </style>
 </head>
 <body>
-    <h1>Firebase 接続テスト</h1>
+    <h1>Firebase 接続テスト (修正版)</h1>
     <p>ブラウザのコンソール（F12キー）を開いて、詳細なログを確認してください。</p>
     <p>結果: <span id="status">テスト中...</span></p>
 
@@ -19,7 +19,6 @@
         const statusEl = document.getElementById('status');
         console.log("1. スクリプトの実行を開始します。");
 
-        // あなたのFirebase設定情報
         const firebaseConfig = {
             apiKey: "AIzaSyA0D7fOnIvQFU3O29q6bb_6gj5tWN23N0s",
             authDomain: "memory-game-10e98.firebaseapp.com",
@@ -32,7 +31,7 @@
         };
 
         try {
-            console.log("2. Firebaseを初期化します...", firebaseConfig);
+            console.log("2. Firebaseを初期化します...");
             const app = initializeApp(firebaseConfig);
             console.log("3. Firebaseアプリの初期化に成功しました。");
             
@@ -42,11 +41,12 @@
             statusEl.textContent = 'Firebase初期化成功。データベースへ接続試行中...';
             statusEl.style.color = 'blue';
 
-            // データベースへの接続を確認するための簡単な読み取りテスト
-            const testRef = ref(database, '.ref');
+            // ★エラー修正: 無効なパス ".ref" を、データベースのルートを示す "/" に修正
+            const testRef = ref(database, '/');
+            
             get(testRef).then(() => {
                 console.log("5. データベースへの接続に成功しました。");
-                statusEl.textContent = '成功: Firebase Realtime Databaseに接続できました。';
+                statusEl.textContent = '成功: Firebase Realtime Databaseに接続できました！';
                 statusEl.style.color = 'green';
             }).catch(error => {
                 console.error("データベース接続エラー:", error);
@@ -56,7 +56,7 @@
 
         } catch (e) {
             console.error("Firebaseの初期化中に致命的なエラーが発生しました:", e);
-            statusEl.textContent = '致命的エラー: Firebaseを初期化できませんでした。コンソールのエラーメッセージを確認してください。firebaseConfigの情報は正しいですか？';
+            statusEl.textContent = '致命的エラー: Firebaseを初期化できませんでした。';
             statusEl.style.color = 'red';
         }
     </script>
